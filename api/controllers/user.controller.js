@@ -36,3 +36,14 @@ export const updateUser = async (req, res) => {
     next(error);
   }
 };
+
+export const deleteUser = async (req, res, next) => {
+   if(req.user.id !== req.params.id) return next(errorHandler(401, 'you can only delete your owm account'))
+   try {
+      await User.findByIdAndDelete(req.param.id)
+      res.clearCookie('access_token')
+      res.status(200).json('user has been deleted!')
+  } catch (error) {
+    next(error);
+  }
+}
