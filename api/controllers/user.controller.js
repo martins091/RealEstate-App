@@ -44,6 +44,6 @@ export const deleteUser = async (req, res, next) => {
       res.clearCookie('access_token')
       res.status(200).json('user has been deleted!')
   } catch (error) {
-    next(error);
+    next(errorHandler(500, 'failed to delete user'));
   }
 }
