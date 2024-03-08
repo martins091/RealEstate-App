@@ -12,7 +12,7 @@ export const test = (req, res) => {
 
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
-    return next(errorHandler(401, 'you can only update your own account'));
+    return next(errorHandler(401, "you can only update your own account"));
   try {
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
@@ -39,25 +39,37 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-   if(req.user.id !== req.params.id) return next(errorHandler(401, 'you can only delete your owm account'))
-   try {
-      await User.findByIdAndDelete(req.param.id)
-      res.clearCookie('access_token')
-      res.status(200).json('user has been deleted!')
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "you can only delete your owm account"));
+  try {
+    await User.findByIdAndDelete(req.param.id);
+    res.clearCookie("access_token");
+    res.status(200).json("user has been deleted!");
   } catch (error) {
-    next(errorHandler(500, 'failed to delete user'));
+    next(errorHandler(500, "failed to delete user"));
   }
-}
+};
 
 export const getUserListings = async (req, res, next) => {
-  if (req.user.id === req.params.id){
-    try{
+  if (req.user.id === req.params.id) {
+    try {
       const listings = await listing.find({ userRef: req.params.id });
       res.status(200).json(listings);
-    } catch(error){
-      next(error)
+    } catch (error) {
+      next(error);
     }
-  } else{
-    return next(errorHandler(401, "You can only view your own listings"))
+  } else {
+    return next(errorHandler(401, "You can only view your own listings"));
   }
-}
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return next(errorHandler(404, "user not found"));
+    const { password: pass, ...rest } = user._doc;
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
