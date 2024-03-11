@@ -127,7 +127,7 @@ export default function Home() {
                 saleListings && offerListings.length > 0 && (
                   <div className="">
                       <div className="my-3">
-                        <h2 className="text-2xl font=semibold text-slate-600">Recent Places Sale</h2>
+                        <h2 className="text-2xl font=semibold text-slate-600">Recent Places for Sale</h2>
                         <Link to={'/search?type=sale'} className=" text-sm text-blue-600 hover:underline">
                           Show more places for sale
                         </Link>
